@@ -30,13 +30,38 @@ public class NBody {
         double uniRadius = readRadius(filename);
         Planet[] ps = readPlanets(filename);
 
-        /* Drawing the Background */
+        /* Drawing*/
         StdDraw.setScale(-uniRadius, uniRadius);
 		StdDraw.clear();
 		StdDraw.picture(0, 0, "images/starfield.jpg");
 
         for (Planet p : ps) {
             p.draw();
+        }
+
+        /* Creating an Animation */
+        StdDraw.enableDoubleBuffering();
+
+        double time = 0;
+        while (time <= T) {
+            double[] xForces = new double[ps.length];
+            double[] yForces = new double[ps.length];
+            for (int i=0; i<ps.length; i++) {
+                xForces[i] = ps[i].calcNetForceExertedByX(ps);
+                yForces[i] = ps[i].calcNetForceExertedByY(ps);
+            }
+            for (int i=0; i<ps.length; i++) {
+                ps[i].update(dt, xForces[i], yForces[i]);
+            }
+
+            StdDraw.clear();
+            StdDraw.picture(0, 0, "images/starfield.jpg");
+            for (Planet p : ps) {
+                p.draw();
+            }
+            StdDraw.show();
+            StdDraw.pause(10);
+            time += dt;
         }
     }
 }
