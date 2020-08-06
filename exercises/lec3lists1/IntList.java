@@ -34,7 +34,8 @@ public class IntList {
 		return this.rest.get(i -1);
 	}
 
-	/** Returns an IntList identical to L, but with
+	/** 
+	 *  Returns an IntList identical to L, but with
      *  each element incremented by x. L is not allowed
      *  to change. */
     public static IntList incrList(IntList L, int x) {
@@ -45,7 +46,8 @@ public class IntList {
 		return Q;
     }
 
-	/** Returns an IntList identical to L, but with
+	/** 
+	 *  Returns an IntList identical to L, but with
      *  each element incremented by x. Not allowed to use
      *  the 'new' keyword. */
     public static IntList dincrList(IntList L, int x) {
