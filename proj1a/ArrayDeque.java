@@ -5,7 +5,7 @@ public class ArrayDeque<T> {
     private int nextLast;
     private static final int INIT_CAPACITY = 8;
 
-    /** Creat an empty array deque. */
+    /** Create an empty array deque. */
     public ArrayDeque() {
         items = (T[]) new Object[INIT_CAPACITY];
         size = 0;
@@ -26,6 +26,8 @@ public class ArrayDeque<T> {
         }
         if (size < items.length / 4 && items.length > 15) {
             resizeHelper(items.length / 2);
+        } else {
+            resizeHelper(items.length);
         }
     }
     private void resizeHelper(int capacity) {
