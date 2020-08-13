@@ -26,8 +26,6 @@ public class ArrayDeque<T> {
         }
         if (size < items.length / 4 && items.length > 15) {
             resizeHelper(items.length / 2);
-        } else {
-            resizeHelper(items.length);
         }
     }
     private void resizeHelper(int capacity) {
@@ -35,7 +33,7 @@ public class ArrayDeque<T> {
         int curr = plusOne(nextFirst);
         for (int i = 0; i < size; i++) {
             newArray[i] = items[curr];
-            plusOne(curr);
+            curr = plusOne(curr);
         }
         items = newArray;
         nextFirst = capacity - 1;
@@ -134,5 +132,21 @@ public class ArrayDeque<T> {
         index = (plusOne(nextFirst) + index) % items.length;
         return items[index];
     }
+
+
+    /*
+    public static void main(String[] args) {
+        ArrayDeque<Integer> aq = new ArrayDeque<Integer>();
+        for (int i = 0; i < 100; i++) {
+            aq.addLast(i);
+        }
+        aq.printDeque();
+        for (int i = 0; i < 98; i++) {
+            aq.removeFirst();
+        }
+        aq.printDeque();
+        System.out.println(aq.get(0));
+    }
+    */
 
 }
