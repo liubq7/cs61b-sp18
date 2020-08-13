@@ -134,7 +134,7 @@ public class ArrayDeque<T> {
     }
 
 
-
+    /*
     public static void main(String[] args) {
         ArrayDeque<Integer> aq = new ArrayDeque<Integer>();
         for (int i = 0; i < 100; i++) {
@@ -147,6 +147,6 @@ public class ArrayDeque<T> {
         aq.printDeque();
         System.out.println(aq.get(0));
     }
-
+    */
 
 }
