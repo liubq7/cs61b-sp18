@@ -91,7 +91,7 @@ public class ArrayDeque<T> {
      *  A single such operation must take “constant time”
      */
     public T removeFirst() {
-        if (size = 0) {
+        if (size == 0) {
             return null;
         }
         int first = plusOne(nextFirst);
@@ -108,7 +108,7 @@ public class ArrayDeque<T> {
      *  A single such operation must take “constant time”
      */
     public T removeLast() {
-        if (size = 0) {
+        if (size == 0) {
             return null;
         }
         int last = minusOne(nextLast);
