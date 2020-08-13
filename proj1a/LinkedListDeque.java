@@ -97,7 +97,7 @@ public class LinkedListDeque<T> {
      *  Must not alter the deque!
      */
     public T get(int index) {
-        if (index > size) {
+        if (index < 0 || index >= size) {
             return null;
         }
         Node curr = sentinel;
