@@ -8,7 +8,8 @@ public class PalindromeFinder {
 
         while (!in.isEmpty()) {
             String word = in.readString();
-            if (word.length() >= minLength && palindrome.isPalindrome(word)) {
+            CharacterComparator cc = new OffByN(3);
+            if (word.length() >= minLength && palindrome.isPalindrome(word, cc)) {
                 System.out.println(word);
             }
         }
