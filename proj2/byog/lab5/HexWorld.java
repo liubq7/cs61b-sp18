@@ -154,9 +154,9 @@ public class HexWorld {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         background(world, WIDTH, HEIGHT);
 
-        Position p = new Position(20, 40);
-        int s = 5;
-        TETile t = Tileset.FLOWER;
+        Position p = new Position(5, 38);
+        int s = 3;
+
         drawVerticalHexes(world, p, s, 4);
 
         ter.renderFrame(world);
