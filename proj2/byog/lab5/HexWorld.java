@@ -67,10 +67,10 @@ public class HexWorld {
     }
 
     /** Adds a row of the same tile.
-     * @param world the world to draw on
-     * @param p the leftmost position of the row
-     * @param width the number of tiles wide to draw
-     * @param t the tile to draw
+     *  @param world the world to draw on
+     *  @param p the leftmost position of the row
+     *  @param width the number of tiles wide to draw
+     *  @param t the tile to draw
      */
     public static void addRow(TETile[][] world, Position p, int width, TETile t) {
         for (int xi = 0; xi < width; xi++) {
@@ -123,14 +123,14 @@ public class HexWorld {
     }
 
 
-    /** computes the bottom-left Position of a current hexagon’s top right neighbor. */
+    /** Computes the bottom-left Position of a current hexagon’s top right neighbor. */
     public static Position topRightNeighbor(Position curr, int s) {
         curr.y = curr.y + s;
         curr.x = curr.x + 2 * s - 1;
         return curr;
     }
 
-    /** computes the bottom-left Position of a current hexagon’s bottom right neighbor. */
+    /** Computes the bottom-left Position of a current hexagon’s bottom right neighbor. */
     public static Position bottomRightNeighbor(Position curr, int s) {
         curr.y = curr.y - s;
         curr.x = curr.x + 2 * s - 1;
