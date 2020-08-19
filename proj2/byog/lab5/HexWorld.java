@@ -13,8 +13,8 @@ import java.util.Random;
  * Draws a world consisting of hexagonal regions.
  */
 public class HexWorld {
-    private static final int WIDTH = 50;
-    private static final int HEIGHT = 50;
+    private static final int WIDTH = 35;
+    private static final int HEIGHT = 35;
 
     private static final long SEED = 2873123;
     private static final Random RANDOM = new Random(SEED);
@@ -125,25 +125,24 @@ public class HexWorld {
 
     /** computes the bottom-left Position of a current hexagon’s top right neighbor. */
     public static Position topRightNeighbor(Position curr, int s) {
-        int y = curr.y + s;
-        int x = curr.x + 2 * s - 1;
-        Position trn = new Position(x, y);
-        return trn;
+        curr.y = curr.y + s;
+        curr.x = curr.x + 2 * s - 1;
+        return curr;
     }
 
     /** computes the bottom-left Position of a current hexagon’s bottom right neighbor. */
     public static Position bottomRightNeighbor(Position curr, int s) {
-        int y = curr.y - s;
-        int x = curr.x + 2 * s - 1;
-        Position brn = new Position(x, y);
-        return brn;
+        curr.y = curr.y - s;
+        curr.x = curr.x + 2 * s - 1;
+        return curr;
     }
 
     /** Draws a column of N hexes, starting from the top hex. */
     public static void drawVerticalHexes(TETile[][] world, Position top, int s, int N) {
+        Position curr = new Position(top.x, top.y);
         for (int i = 0; i < N; i++) {
-            addHexagon(world, top, s, randomTile());
-            top.y = top.y - 2 * s;
+            addHexagon(world, curr, s, randomTile());
+            curr.y = curr.y - 2 * s;
         }
     }
 
@@ -154,10 +153,14 @@ public class HexWorld {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         background(world, WIDTH, HEIGHT);
 
-        Position p = new Position(5, 38);
+        Position p = new Position(5, 23);
         int s = 3;
 
-        drawVerticalHexes(world, p, s, 4);
+        drawVerticalHexes(world, p, s, 3);
+        drawVerticalHexes(world, topRightNeighbor(p, s), s, 4);
+        drawVerticalHexes(world, topRightNeighbor(p, s), s, 5);
+        drawVerticalHexes(world, bottomRightNeighbor(p, s), s, 4);
+        drawVerticalHexes(world, bottomRightNeighbor(p, s), s, 3);
 
         ter.renderFrame(world);
     }
