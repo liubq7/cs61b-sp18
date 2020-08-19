@@ -111,8 +111,19 @@ public class HexWorld {
         }
     }
 
+    private static TETile randomTile() {
+        int tileNum = RANDOM.nextInt(4);
+        switch (tileNum) {
+            case 0: return Tileset.WALL;
+            case 1: return Tileset.FLOWER;
+            case 2: return Tileset.SAND;
+            case 3: return Tileset.TREE;
+            default: return Tileset.NOTHING;
+        }
+    }
 
-    /** compute the bottom-left Position of a current hexagon’s top right neighbor. */
+
+    /** computes the bottom-left Position of a current hexagon’s top right neighbor. */
     public static Position topRightNeighbor(Position curr, int s) {
         int y = curr.y + s;
         int x = curr.x + 2 * s - 1;
@@ -120,12 +131,20 @@ public class HexWorld {
         return trn;
     }
 
-    /** compute the bottom-left Position of a current hexagon’s bottom right neighbor. */
+    /** computes the bottom-left Position of a current hexagon’s bottom right neighbor. */
     public static Position bottomRightNeighbor(Position curr, int s) {
         int y = curr.y - s;
         int x = curr.x + 2 * s - 1;
         Position brn = new Position(x, y);
         return brn;
+    }
+
+    /** Draws a column of N hexes, starting from the top hex. */
+    public static void drawVerticalHexes(TETile[][] world, Position top, int s, int N) {
+        for (int i = 0; i < N; i++) {
+            addHexagon(world, top, s, randomTile());
+            top.y = top.y - 2 * s;
+        }
     }
 
 
@@ -135,17 +154,10 @@ public class HexWorld {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         background(world, WIDTH, HEIGHT);
 
-        Position p = new Position(10, 20);
+        Position p = new Position(20, 40);
         int s = 5;
         TETile t = Tileset.FLOWER;
-        addHexagon(world, p, s, t);
-
-        Position ptrn = topRightNeighbor(p,s);
-        Position pbrn = bottomRightNeighbor(p,s);
-        TETile t1 = Tileset.GRASS;
-        TETile t2 = Tileset.SAND;
-        addHexagon(world, ptrn, s, t1);
-        addHexagon(world, pbrn, s, t2);
+        drawVerticalHexes(world, p, s, 4);
 
         ter.renderFrame(world);
     }
