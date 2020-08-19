@@ -111,6 +111,24 @@ public class HexWorld {
         }
     }
 
+
+    /** compute the bottom-left Position of a current hexagon’s top right neighbor. */
+    public static Position topRightNeighbor(Position curr, int s) {
+        int y = curr.y + s;
+        int x = curr.x + 2 * s - 1;
+        Position trn = new Position(x, y);
+        return trn;
+    }
+
+    /** compute the bottom-left Position of a current hexagon’s bottom right neighbor. */
+    public static Position bottomRightNeighbor(Position curr, int s) {
+        int y = curr.y - s;
+        int x = curr.x + 2 * s - 1;
+        Position brn = new Position(x, y);
+        return brn;
+    }
+
+
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
@@ -119,8 +137,15 @@ public class HexWorld {
 
         Position p = new Position(10, 20);
         int s = 5;
-        TETile t = new TETile('❀', Color.magenta, Color.pink, "flower");
+        TETile t = Tileset.FLOWER;
         addHexagon(world, p, s, t);
+
+        Position ptrn = topRightNeighbor(p,s);
+        Position pbrn = bottomRightNeighbor(p,s);
+        TETile t1 = Tileset.GRASS;
+        TETile t2 = Tileset.SAND;
+        addHexagon(world, ptrn, s, t1);
+        addHexagon(world, pbrn, s, t2);
 
         ter.renderFrame(world);
     }
