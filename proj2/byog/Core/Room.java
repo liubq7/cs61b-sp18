@@ -31,9 +31,9 @@ public class Room {
      *  @param ww 生成world的宽
      *  @param wh 生成world的高
      *  @param random 由seed生成的随机数 */
-    private static Room randomRoom(int ww, int wh, Random random) {
-        int px = random.nextInt(ww - 2);
-        int py = random.nextInt(wh - 2);
+    public static Room randomRoom(int ww, int wh, Random random) {
+        int px = random.nextInt(ww - 3);
+        int py = random.nextInt(wh - 3);
         Position p = new Position(px, py);
         int w = RandomUtils.uniform(random, 4, 10);
         int h = RandomUtils.uniform(random, 4, 10);
@@ -42,7 +42,7 @@ public class Room {
         Position[] cp = rr.cornerPosition();
         for (Position P : cp) {
             if (P.x > ww - 1 || P.y > wh - 1) {
-                return null;
+                return new Room(p, 4,4);
             }
         }
         return rr;
@@ -55,7 +55,7 @@ public class Room {
                 && (p.y > bottomLeft.y && p.y < bottomLeft.y + height - 1);
     }
     /* 房间r(含围墙)是否与此房间(不含围墙)相交 */
-    private boolean isOverlap(Room r) {
+    public boolean isOverlap(Room r) {
         Position[] cp = r.cornerPosition();
         for (Position p : cp) {
             if (containPosition(p)) {
