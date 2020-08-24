@@ -2,6 +2,7 @@ package byog.Core;
 
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+import java.util.ArrayList;
 
 public class WorldGenerator {
     private int width;
@@ -16,4 +17,11 @@ public class WorldGenerator {
         }
     }
 
+    /* num也是随机来的 */
+    public void drawRoomList(int num) {
+        ArrayList<Room> roomList = new ArrayList<>();
+        for (int i = 0; i < num; i += 1) {
+
+        }
+    }
 }
