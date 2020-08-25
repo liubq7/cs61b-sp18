@@ -27,12 +27,15 @@ public class Room {
         return cp;
     }
 
-    /** 生成一个随机位置的随机大小的房间,长宽的取值范围为[4,9],房间不能超出world
-     *  如果超出就生成一个在bottomleft位置最小的矩形
-     *  @param ww 生成world的宽
-     *  @param wh 生成world的高
-     *  @param random 由seed生成的随机数 */
-    public static Room randomRoom(int ww, int wh, Random random) {
+    /**
+     * 生成一个随机位置的随机大小的房间,矩形长宽的取值范围为[4,9],房间不能超出world
+     * 如果超出就生成一个在bottomleft位置最小的矩形(4X4)
+     * @param random 由SEED生成的随机数
+     */
+    public static Room randomRoom(TETile[][] world, Random random) {
+        int ww = world.length;
+        int wh = world[0].length;
+
         int px = random.nextInt(ww - 3);
         int py = random.nextInt(wh - 3);
         Position p = new Position(px, py);
@@ -110,7 +113,7 @@ public class Room {
         Position p = new Position(25, 10);
         drawARoom(world, p, 7, 5);
 
-        Room rr = randomRoom(60,30, random);
+        Room rr = randomRoom(world, random);
         drawARoom(world, rr);
 
         ter.renderFrame(world);
