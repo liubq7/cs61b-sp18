@@ -24,7 +24,7 @@ public class WorldGenerator {
         }
     }
 
-    /* num也是随机来的,并且要规定范围(吗?) */
+    /* num也是随机来的（吗？）,并且要规定范围(吗?) （感觉15-20个比较合适）*/
     public void drawRoomList(TETile[][] world, int num, Random random) {
         ArrayList<Room> roomList = new ArrayList<>();
         Room rr1 = Room.randomRoom(width, height, random);
@@ -32,13 +32,17 @@ public class WorldGenerator {
         Room.drawARoom(world, rr1);
         for (int i = 0; i < num - 1; i += 1) {
             Room rr = Room.randomRoom(width, height, random);
+            boolean available = true;
             for (Room r : roomList) {
                 if (r.isOverlap(rr)) {
-                    break;// todo: 推迟大的for循环,how?
+                    available = false;
+                    break;
                 }
             }
-            roomList.add(rr);
-            Room.drawARoom(world, rr);
+            if (available == true) {
+                roomList.add(rr);
+                Room.drawARoom(world, rr);
+            }
         }
     }
 
@@ -56,7 +60,7 @@ public class WorldGenerator {
         }
 
         WorldGenerator wg = new WorldGenerator(60, 30);
-        wg.drawRoomList(world, 5, random);
+        wg.drawRoomList(world, 20, random);
 
         ter.renderFrame(world);
     }

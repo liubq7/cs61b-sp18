@@ -28,6 +28,7 @@ public class Room {
     }
 
     /** 生成一个随机位置的随机大小的房间,长宽的取值范围为[4,9],房间不能超出world
+     *  如果超出就生成一个在bottomleft位置最小的矩形
      *  @param ww 生成world的宽
      *  @param wh 生成world的高
      *  @param random 由seed生成的随机数 */
