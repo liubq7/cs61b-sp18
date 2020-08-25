@@ -70,7 +70,7 @@ public class Room {
     }
 
     /* 绘制房间+围墙部分 */
-    public static void drawARoom(TETile[][] world, Position p, int w, int h) {
+    public static void drawRoom(TETile[][] world, Position p, int w, int h) {
         for (int x = p.x; x < p.x + w; x += 1) {
             for (int y = p.y; y < p.y + h; y += 1) {
                 if (x == p.x || x == p.x + w - 1 || y == p.y || y == p.y + h - 1) {
@@ -81,7 +81,7 @@ public class Room {
             }
         }
     }
-    public static void drawARoom(TETile[][] world, Room r) {
+    public static void drawRoom(TETile[][] world, Room r) {
         Position p = r.bottomLeft;
         int w = r.width;
         int h = r.height;
@@ -111,10 +111,10 @@ public class Room {
         }
 
         Position p = new Position(25, 10);
-        drawARoom(world, p, 7, 5);
+        drawRoom(world, p, 7, 5);
 
         Room rr = randomRoom(world, random);
-        drawARoom(world, rr);
+        drawRoom(world, rr);
 
         ter.renderFrame(world);
     }
