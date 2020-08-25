@@ -3,6 +3,8 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Room {
@@ -10,6 +12,7 @@ public class Room {
     private Position bottomLeft;
     private int width;
     private int height;
+    private Position randomPos;
 
     private Room(Position p, int w, int h) {
         bottomLeft = p;
@@ -27,9 +30,17 @@ public class Room {
         return cp;
     }
 
+    /* 生成房间内的一个随机点，包含围墙 */
+    private void randomPosition(Random random) {
+        int rx = RandomUtils.uniform(random, bottomLeft.x, bottomLeft.x + width);
+        int ry = RandomUtils.uniform(random, bottomLeft.y, bottomLeft.y + height);
+        randomPos = new Position(rx, ry);
+    }
+
     /**
      * 生成一个随机位置的随机大小的房间,矩形长宽的取值范围为[4,9],房间不能超出world
      * 如果超出就生成一个在bottomleft位置最小的矩形(4X4)
+     * 同时生成该房间内的一个随机点
      * @param random 由SEED生成的随机数
      */
     public static Room randomRoom(TETile[][] world, Random random) {
@@ -46,19 +57,21 @@ public class Room {
         Position[] cp = rr.cornerPosition();
         for (Position P : cp) {
             if (P.x > ww - 1 || P.y > wh - 1) {
-                return new Room(p, 4,4);
+                rr = new Room(p, 4,4);
+                break;
             }
         }
+        rr.randomPosition(random);
         return rr;
     }
 
 
-    /* 某点是否包含在该房间(不含围墙)中 */
+    /* 某点是否包含在该房间(含围墙)中 */
     private boolean containPosition(Position p) {
-        return (p.x > bottomLeft.x && p.x < bottomLeft.x + width - 1)
-                && (p.y > bottomLeft.y && p.y < bottomLeft.y + height - 1);
+        return (p.x >= bottomLeft.x && p.x < bottomLeft.x + width)
+                && (p.y >= bottomLeft.y && p.y < bottomLeft.y + height);
     }
-    /* 房间r(含围墙)是否与此房间(不含围墙)相交 */
+    /* 房间r(含围墙)是否与此房间(含围墙)相交 */
     public boolean isOverlap(Room r) {
         Position[] cp = r.cornerPosition();
         for (Position p : cp) {
@@ -70,7 +83,7 @@ public class Room {
     }
 
     /* 绘制房间+围墙部分 */
-    public static void drawRoom(TETile[][] world, Position p, int w, int h) {
+    private static void drawRoom(TETile[][] world, Position p, int w, int h) {
         for (int x = p.x; x < p.x + w; x += 1) {
             for (int y = p.y; y < p.y + h; y += 1) {
                 if (x == p.x || x == p.x + w - 1 || y == p.y || y == p.y + h - 1) {
@@ -81,7 +94,7 @@ public class Room {
             }
         }
     }
-    public static void drawRoom(TETile[][] world, Room r) {
+    private static void drawRoom(TETile[][] world, Room r) {
         Position p = r.bottomLeft;
         int w = r.width;
         int h = r.height;
@@ -93,6 +106,13 @@ public class Room {
                     world[x][y] = Tileset.FLOOR;
                 }
             }
+        }
+    }
+
+    /* 绘制roomlist */
+    public static void drawRoomList(TETile[][] world, ArrayList<Room> roomList) {
+        for (Room r : roomList) {
+            drawRoom(world, r);
         }
     }
 
@@ -115,6 +135,7 @@ public class Room {
 
         Room rr = randomRoom(world, random);
         drawRoom(world, rr);
+        rr.randomPosition(random);
 
         ter.renderFrame(world);
     }
