@@ -1,7 +1,10 @@
 package byog.Core;
 
+import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+
+import java.util.Random;
 
 public class Hallway {
     private Position start;
@@ -24,10 +27,10 @@ public class Hallway {
         corner = pc;
     }
 
-    /* 绘制过道不含围墙部分 */
-    public static void drawHallway(TETile[][] world, Hallway h) {
+    /* 绘制L型 */
+    public static void drawL(TETile[][] world, Hallway h, TETile t) {
         for (int x = h.start.x; x < h.corner.x; x += 1) {
-            world[x][h.start.y] = Tileset.FLOOR;
+            world[x][h.start.y] = t;
         }
 
         int y1;
@@ -40,7 +43,29 @@ public class Hallway {
             y2 = h.corner.y;
         }
         for (int y = y1; y <= y2; y += 1) {
-            world[h.end.x][y] = Tileset.FLOOR;
+            world[h.end.x][y] = t;
         }
+    }
+
+
+    public static void main(String[] args) {
+        TERenderer ter = new TERenderer();
+        ter.initialize(60, 30);
+
+        // initialize tiles
+        TETile[][] world = new TETile[60][30];
+        for (int x = 0; x < 60; x += 1) {
+            for (int y = 0; y < 30; y += 1) {
+                world[x][y] = Tileset.NOTHING;
+            }
+        }
+
+        Position p1 = new Position(25, 10);
+        Position p2 = new Position(30, 20);
+        Hallway h = new Hallway(p1, p2);
+        drawL(world, h, Tileset.FLOWER);
+
+
+        ter.renderFrame(world);
     }
 }
