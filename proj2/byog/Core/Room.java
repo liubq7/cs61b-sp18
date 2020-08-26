@@ -21,17 +21,6 @@ public class Room {
         height = h;
     }
 
-    private static class roomComparator implements Comparator<Room> {
-        /* r1比r2小则返回负数 */
-        @Override
-        public int compare(Room r1, Room r2) {
-            int rpSum1 = r1.randomPos.x + r1.randomPos.y;
-            int rpSum2 = r2.randomPos.x + r2.randomPos.y;
-            return rpSum1 - rpSum2;
-        }
-    }
-
-
 
     /* 房间四角坐标 */
     private Position[] cornerPosition() {
@@ -155,8 +144,24 @@ public class Room {
         return roomList;
     }
 
-    /* TODO:按照randompos的位置大小对roomlist进行排序，randompos的x+y越小则越靠前 */
-    private static ArrayList<Room> sortRoomList(ArrayList<Room> roomList) {
+    private static class roomComparator implements Comparator<Room> {
+        /* 比较r1与r2 randompos的x+y，r1比r2小则返回负数 */
+        @Override
+        public int compare(Room r1, Room r2) {
+            int rpSum1 = r1.randomPos.x + r1.randomPos.y;
+            int rpSum2 = r2.randomPos.x + r2.randomPos.y;
+            return rpSum1 - rpSum2;
+        }
+    }
+
+    /**
+     * 生成一系列不相交的随机位置随机大小的房间（含围墙），并组成arraylist
+     * 按照randompos的位置大小对roomlist进行排序，randompos的x+y越小则越靠前
+     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
+     * @param random 由seed产生的随机数，一旦seed确定则生成房间list确定（除数量）
+     */
+    public static ArrayList<Room> RoomList(TETile[][] world, int num, Random random) {
+        ArrayList<Room> roomList = generateRoomList(world, num, random);
         roomComparator cp = new roomComparator();
         roomList.sort(cp);
         return roomList;
@@ -177,17 +182,13 @@ public class Room {
         }
 
 
-        ArrayList<Room> rl = Room.generateRoomList(world, 20, random);
+        ArrayList<Room> rl = RoomList(world, 20, random);
         for (int i = 0; i < rl.size(); i++) {
             System.out.print(rl.get(i).randomPos.x + " ");
         }
         System.out.println();
-        Room.drawRoomList(world, rl);
+        drawRoomList(world, rl);
 
-        rl = sortRoomList(rl);
-        for (int i = 0; i < rl.size(); i++) {
-            System.out.print(rl.get(i).randomPos.x + " ");
-        }
 
         ter.renderFrame(world);
     }
