@@ -137,7 +137,7 @@ public class Room {
             Room rr = Room.randomRoom(world, random);
             boolean available = true;
             for (Room r : rl) {
-                if (r.isOverlap(rr)) {
+                if (r.isOverlap(rr) || rr.isOverlap(r)) {
                     available = false;
                     break;
                 }
