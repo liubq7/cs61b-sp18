@@ -43,7 +43,11 @@ public class WorldGenerator {
             }
         }
 
-
+        ArrayList<Room> rl = Room.roomList(world, 20, random);
+        ArrayList<Hallway> hl = Hallway.hallwayList(rl);
+        Hallway.drawHListWall(world, hl);
+        Room.drawRoomList(world, rl);
+        Hallway.drawHListFloor(world, hl);
 
         ter.renderFrame(world);
     }

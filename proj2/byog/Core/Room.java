@@ -39,6 +39,11 @@ public class Room {
         randomPos = new Position(rx, ry);
     }
 
+    /* 外界获取randomPos */
+    public Position getRandomPos() {
+        return randomPos;
+    }
+
     /**
      * 生成一个随机位置的随机大小的房间,矩形长宽的取值范围为[4,9],房间不能超出world
      * 如果超出就生成一个在bottomleft位置最小的矩形(4X4)
@@ -121,27 +126,27 @@ public class Room {
 
     /**
      * 生成一系列不相交的随机位置随机大小的房间（含围墙），并组成arraylist
-     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
+     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）TODO:介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
      * @param random 由seed产生的随机数，一旦seed确定则生成房间list确定（除数量）
      */
     private static ArrayList<Room> generateRoomList(TETile[][] world, int num, Random random) {
-        ArrayList<Room> roomList = new ArrayList<>();
+        ArrayList<Room> rl = new ArrayList<>();
         Room rr1 = Room.randomRoom(world, random);
-        roomList.add(rr1);
+        rl.add(rr1);
         for (int i = 0; i < num - 1; i += 1) {
             Room rr = Room.randomRoom(world, random);
             boolean available = true;
-            for (Room r : roomList) {
+            for (Room r : rl) {
                 if (r.isOverlap(rr)) {
                     available = false;
                     break;
                 }
             }
             if (available == true) {
-                roomList.add(rr);
+                rl.add(rr);
             }
         }
-        return roomList;
+        return rl;
     }
 
     private static class roomComparator implements Comparator<Room> {
@@ -160,11 +165,11 @@ public class Room {
      * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
      * @param random 由seed产生的随机数，一旦seed确定则生成房间list确定（除数量）
      */
-    public static ArrayList<Room> RoomList(TETile[][] world, int num, Random random) {
-        ArrayList<Room> roomList = generateRoomList(world, num, random);
+    public static ArrayList<Room> roomList(TETile[][] world, int num, Random random) {
+        ArrayList<Room> rl = generateRoomList(world, num, random);
         roomComparator cp = new roomComparator();
-        roomList.sort(cp);
-        return roomList;
+        rl.sort(cp);
+        return rl;
     }
 
 
@@ -182,7 +187,7 @@ public class Room {
         }
 
 
-        ArrayList<Room> rl = RoomList(world, 20, random);
+        ArrayList<Room> rl = roomList(world, 20, random);
         for (int i = 0; i < rl.size(); i++) {
             System.out.print(rl.get(i).randomPos.x + " ");
         }

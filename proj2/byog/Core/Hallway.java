@@ -4,6 +4,7 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Hallway {
@@ -73,7 +74,7 @@ public class Hallway {
     }
 
     /* 绘制hallway的围墙 */
-    public static void drawHallwayWall(TETile[][] world, Hallway h) {
+    private static void drawHallwayWall(TETile[][] world, Hallway h) {
         if (h.hEnd.y > h.hStart.y) {
             drawWallUp(world, h);
         } else {
@@ -81,9 +82,32 @@ public class Hallway {
         }
     }
     /* 绘制hallway的地板 */
-    public static void drawHallwayFloor(TETile[][] world, Hallway h) {
+    private static void drawHallwayFloor(TETile[][] world, Hallway h) {
         L l = new L(h.hStart, h.hEnd);
         drawL(world, l, Tileset.FLOOR);
+    }
+
+    /* 绘制hallwayList的围墙 */
+    public static void drawHListWall(TETile[][] world, ArrayList<Hallway> hl) {
+        for (Hallway h : hl) {
+            drawHallwayWall(world, h);
+        }
+    }
+    /* 绘制hallwayList的地板 */
+    public static void drawHListFloor(TETile[][] world, ArrayList<Hallway> hl) {
+        for (Hallway h : hl) {
+            drawHallwayFloor(world, h);
+        }
+    }
+
+    /* 生成roomlist对应的hallwaylist */
+    public static ArrayList<Hallway> hallwayList(ArrayList<Room> rl) {
+        ArrayList<Hallway> hl = new ArrayList<>();
+        for (int i = 0; i < rl.size() - 1; i += 1) {
+            Hallway h = new Hallway(rl.get(i).getRandomPos(), rl.get(i + 1).getRandomPos());
+            hl.add(h);
+        }
+        return hl;
     }
 
 
