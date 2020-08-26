@@ -5,6 +5,7 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 
 public class Room {
@@ -19,6 +20,18 @@ public class Room {
         width = w;
         height = h;
     }
+
+    private static class roomComparator implements Comparator<Room> {
+        /* r1比r2小则返回负数 */
+        @Override
+        public int compare(Room r1, Room r2) {
+            int rpSum1 = r1.randomPos.x + r1.randomPos.y;
+            int rpSum2 = r2.randomPos.x + r2.randomPos.y;
+            return rpSum1 - rpSum2;
+        }
+    }
+
+
 
     /* 房间四角坐标 */
     private Position[] cornerPosition() {
@@ -43,7 +56,7 @@ public class Room {
      * 同时生成该房间内的一个随机点
      * @param random 由SEED生成的随机数
      */
-    public static Room randomRoom(TETile[][] world, Random random) {
+    private static Room randomRoom(TETile[][] world, Random random) {
         int ww = world.length;
         int wh = world[0].length;
 
@@ -72,7 +85,7 @@ public class Room {
                 && (p.y >= bottomLeft.y && p.y < bottomLeft.y + height);
     }
     /* 房间r(含围墙)是否与此房间(含围墙)相交 */
-    public boolean isOverlap(Room r) {
+    private boolean isOverlap(Room r) {
         Position[] cp = r.cornerPosition();
         for (Position p : cp) {
             if (containPosition(p)) {
@@ -117,6 +130,39 @@ public class Room {
     }
 
 
+    /**
+     * 生成一系列不相交的随机位置随机大小的房间（含围墙），并组成arraylist
+     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
+     * @param random 由seed产生的随机数，一旦seed确定则生成房间list确定（除数量）
+     */
+    private static ArrayList<Room> generateRoomList(TETile[][] world, int num, Random random) {
+        ArrayList<Room> roomList = new ArrayList<>();
+        Room rr1 = Room.randomRoom(world, random);
+        roomList.add(rr1);
+        for (int i = 0; i < num - 1; i += 1) {
+            Room rr = Room.randomRoom(world, random);
+            boolean available = true;
+            for (Room r : roomList) {
+                if (r.isOverlap(rr)) {
+                    available = false;
+                    break;
+                }
+            }
+            if (available == true) {
+                roomList.add(rr);
+            }
+        }
+        return roomList;
+    }
+
+    /* TODO:按照randompos的位置大小对roomlist进行排序，randompos的x+y越小则越靠前 */
+    private static ArrayList<Room> sortRoomList(ArrayList<Room> roomList) {
+        roomComparator cp = new roomComparator();
+        roomList.sort(cp);
+        return roomList;
+    }
+
+
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(60, 30);
@@ -130,12 +176,18 @@ public class Room {
             }
         }
 
-        Position p = new Position(25, 10);
-        drawRoom(world, p, 7, 5);
 
-        Room rr = randomRoom(world, random);
-        drawRoom(world, rr);
-        rr.randomPosition(random);
+        ArrayList<Room> rl = Room.generateRoomList(world, 20, random);
+        for (int i = 0; i < rl.size(); i++) {
+            System.out.print(rl.get(i).randomPos.x + " ");
+        }
+        System.out.println();
+        Room.drawRoomList(world, rl);
+
+        rl = sortRoomList(rl);
+        for (int i = 0; i < rl.size(); i++) {
+            System.out.print(rl.get(i).randomPos.x + " ");
+        }
 
         ter.renderFrame(world);
     }
