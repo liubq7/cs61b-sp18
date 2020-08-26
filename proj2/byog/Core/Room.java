@@ -30,10 +30,10 @@ public class Room {
         return cp;
     }
 
-    /* 生成房间内的一个随机点，包含围墙 */
+    /* 生成房间内的一个随机点，不包含围墙 */
     private void randomPosition(Random random) {
-        int rx = RandomUtils.uniform(random, bottomLeft.x, bottomLeft.x + width);
-        int ry = RandomUtils.uniform(random, bottomLeft.y, bottomLeft.y + height);
+        int rx = RandomUtils.uniform(random, bottomLeft.x + 1, bottomLeft.x + width - 1);
+        int ry = RandomUtils.uniform(random, bottomLeft.y + 1, bottomLeft.y + height - 1);
         randomPos = new Position(rx, ry);
     }
 

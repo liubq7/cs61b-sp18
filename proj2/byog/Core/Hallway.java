@@ -57,32 +57,33 @@ public class Hallway {
         }
     }
 
-    /* 绘制end在上面的hallway（含围墙） */
-    private static void drawHallwayUp(TETile[][] world, Hallway h) {
-        L l1 = new L(h.hStart, h.hEnd);
-        L l2 = new L(h.hStart.upPosition(), h.hEnd.leftPosition());
-        L l3 = new L(h.hStart.downPosition(), h.hEnd.rightPosition());
-        drawL(world, l1, Tileset.FLOOR);
+    /* 绘制end在上面的hallway的围墙 */
+    private static void drawWallUp(TETile[][] world, Hallway h) {
+        L l1 = new L(h.hStart.upPosition(), h.hEnd.leftPosition());
+        L l2 = new L(h.hStart.downPosition(), h.hEnd.rightPosition());
+        drawL(world, l1, Tileset.WALL);
         drawL(world, l2, Tileset.WALL);
-        drawL(world, l3, Tileset.WALL);
     }
-    /* 绘制end在下面的hallway（含围墙） */
-    private static void drawHallwayDown(TETile[][] world, Hallway h) {
-        L l1 = new L(h.hStart, h.hEnd);
-        L l2 = new L(h.hStart.upPosition(), h.hEnd.rightPosition());
-        L l3 = new L(h.hStart.downPosition(), h.hEnd.leftPosition());
-        drawL(world, l1, Tileset.FLOOR);
+    /* 绘制end在下面的hallway的围墙 */
+    private static void drawWallDown(TETile[][] world, Hallway h) {
+        L l1 = new L(h.hStart.upPosition(), h.hEnd.rightPosition());
+        L l2 = new L(h.hStart.downPosition(), h.hEnd.leftPosition());
+        drawL(world, l1, Tileset.WALL);
         drawL(world, l2, Tileset.WALL);
-        drawL(world, l3, Tileset.WALL);
     }
 
-    /* 绘制hallway（含围墙） */
-    public static void drawHallway(TETile[][] world, Hallway h) {
+    /* 绘制hallway的围墙 */
+    public static void drawHallwayWall(TETile[][] world, Hallway h) {
         if (h.hEnd.y > h.hStart.y) {
-            drawHallwayUp(world, h);
+            drawWallUp(world, h);
         } else {
-            drawHallwayDown(world, h);
+            drawWallDown(world, h);
         }
+    }
+    /* 绘制hallway的地板 */
+    public static void drawHallwayFloor(TETile[][] world, Hallway h) {
+        L l = new L(h.hStart, h.hEnd);
+        drawL(world, l, Tileset.FLOOR);
     }
 
 
@@ -104,8 +105,8 @@ public class Hallway {
         Position p4 = new Position(20, 20);
         Hallway h1 = new Hallway(p1, p2);
         Hallway h2 = new Hallway(p3, p4);
-        drawHallway(world, h1);
-        drawHallway(world, h2);
+        drawHallwayWall(world, h1);
+        drawHallwayFloor(world, h2);
 
 
         ter.renderFrame(world);
