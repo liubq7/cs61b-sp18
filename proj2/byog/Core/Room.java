@@ -126,15 +126,15 @@ public class Room {
 
     /**
      * 生成一系列不相交的随机位置随机大小的房间（含围墙），并组成arraylist
-     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）TODO:介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
+     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）设为固定值25
      * @param random 由seed产生的随机数，一旦seed确定则生成房间list确定（除数量）
      */
     private static ArrayList<Room> generateRoomList(TETile[][] world, int num, Random random) {
         ArrayList<Room> rl = new ArrayList<>();
-        Room rr1 = Room.randomRoom(world, random);
+        Room rr1 = randomRoom(world, random);
         rl.add(rr1);
         for (int i = 0; i < num - 1; i += 1) {
-            Room rr = Room.randomRoom(world, random);
+            Room rr = randomRoom(world, random);
             boolean available = true;
             for (Room r : rl) {
                 if (r.isOverlap(rr) || rr.isOverlap(r)) {
@@ -162,7 +162,7 @@ public class Room {
     /**
      * 生成一系列不相交的随机位置随机大小的房间（含围墙），并组成arraylist
      * 按照randompos的位置大小对roomlist进行排序，randompos的x+y越小则越靠前
-     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）介于15-20比较合适?（是否需要随机生成？随机应由seed确定一个不变的数）
+     * @param num 预计要产生的房间数（实际扣除重叠可能会小于这个数）设为固定值25
      * @param random 由seed产生的随机数，一旦seed确定则生成房间list确定（除数量）
      */
     public static ArrayList<Room> roomList(TETile[][] world, int num, Random random) {
@@ -170,6 +170,44 @@ public class Room {
         roomComparator cp = new roomComparator();
         rl.sort(cp);
         return rl;
+    }
+
+
+
+    /* 生成locked door的position */
+    public static Position lockedDoor(TETile[][] world, ArrayList<Room> rl, Random random) {
+        int doorIndex = random.nextInt(rl.size());
+        Room doorRoom = rl.get(doorIndex);
+        ArrayList<Position> door = new ArrayList<>();
+        for (int i = doorRoom.bottomLeft.x + 1; i < doorRoom.bottomLeft.x + doorRoom.width - 1; i++) {
+            if (doorRoom.bottomLeft.y > 0) {
+                if (world[i][doorRoom.bottomLeft.y].equals(Tileset.WALL)
+                        && world[i][doorRoom.bottomLeft.y - 1].equals(Tileset.NOTHING)) {
+                    door.add(new Position(i, doorRoom.bottomLeft.y));
+                }
+            }
+            if (doorRoom.bottomLeft.y + doorRoom.height < world[0].length) {
+                if (world[i][doorRoom.bottomLeft.y + doorRoom.height - 1].equals(Tileset.WALL)
+                        && world[i][doorRoom.bottomLeft.y + doorRoom.height].equals(Tileset.NOTHING)) {
+                    door.add(new Position(i, doorRoom.bottomLeft.y + doorRoom.height - 1));
+                }
+            }
+        }
+        for (int j = doorRoom.bottomLeft.y + 1; j < doorRoom.bottomLeft.y + doorRoom.height - 1; j++) {
+            if (doorRoom.bottomLeft.x > 0) {
+                if (world[doorRoom.bottomLeft.x][j].equals(Tileset.WALL)
+                        && world[doorRoom.bottomLeft.x - 1][j].equals(Tileset.NOTHING)) {
+                    door.add(new Position(doorRoom.bottomLeft.x, j));
+                }
+            }
+            if (doorRoom.bottomLeft.x + doorRoom.width < world.length) {
+                if (world[doorRoom.bottomLeft.x + doorRoom.width - 1][j].equals(Tileset.WALL)
+                        && world[doorRoom.bottomLeft.x + doorRoom.width][j].equals(Tileset.NOTHING)) {
+                    door.add(new Position(doorRoom.bottomLeft.x + doorRoom.width - 1, j));
+                }
+            }
+        }
+        return door.get(random.nextInt(door.size()));
     }
 
 

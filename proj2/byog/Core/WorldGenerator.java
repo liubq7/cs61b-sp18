@@ -33,7 +33,7 @@ public class WorldGenerator {
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(60, 30);
-        Random random = new Random(8888);
+        Random random = new Random(155187);
 
         // initialize tiles
         TETile[][] world = new TETile[60][30];
@@ -48,6 +48,8 @@ public class WorldGenerator {
         Hallway.drawHListWall(world, hl);
         Room.drawRoomList(world, rl);
         Hallway.drawHListFloor(world, hl);
+        Position door = Room.lockedDoor(world, rl, random);
+        world[door.x][door.y] = Tileset.LOCKED_DOOR;
 
         ter.renderFrame(world);
     }
