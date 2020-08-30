@@ -32,12 +32,12 @@ public class WorldGenerator {
 
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
-        ter.initialize(60, 30);
-        Random random = new Random(155187);
+        ter.initialize(80, 30);
+        Random random = new Random(333);
 
         // initialize tiles
-        TETile[][] world = new TETile[60][30];
-        for (int x = 0; x < 60; x += 1) {
+        TETile[][] world = new TETile[80][30];
+        for (int x = 0; x < 80; x += 1) {
             for (int y = 0; y < 30; y += 1) {
                 world[x][y] = Tileset.NOTHING;
             }

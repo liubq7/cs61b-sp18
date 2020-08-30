@@ -207,7 +207,12 @@ public class Room {
                 }
             }
         }
-        return door.get(random.nextInt(door.size()));
+
+        if (door.size() > 0) {
+            return door.get(random.nextInt(door.size()));
+        } else {
+            return lockedDoor(world, rl, random);
+        }
     }
 
 
