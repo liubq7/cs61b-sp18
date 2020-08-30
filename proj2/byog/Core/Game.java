@@ -12,51 +12,50 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-	public static final int NUM = 25;
-	private String seedString = "";
+    public static final int NUM = 25;
+    private String seedString = "";
 
-	private TETile[][] worldGenerate(long seed) {
-		Random random = new Random(seed);
+    private TETile[][] worldGenerate(long seed) {
+        Random random = new Random(seed);
 
-		// initialize tiles
-		TETile[][] world = new TETile[WIDTH][HEIGHT];
-		for (int x = 0; x < WIDTH; x += 1) {
-			for (int y = 0; y < HEIGHT; y += 1) {
-				world[x][y] = Tileset.NOTHING;
-			}
-		}
+        // initialize tiles
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                world[x][y] = Tileset.NOTHING;
+            }
+        }
 
-		ArrayList<Room> rl = Room.roomList(world, NUM, random);
-		ArrayList<Hallway> hl = Hallway.hallwayList(rl);
-		Hallway.drawHListWall(world, hl);
-		Room.drawRoomList(world, rl);
-		Hallway.drawHListFloor(world, hl);
-		Position door = Room.lockedDoor(world, rl, random);
-		world[door.x][door.y] = Tileset.LOCKED_DOOR;
+        ArrayList<Room> rl = Room.roomList(world, NUM, random);
+        ArrayList<Hallway> hl = Hallway.hallwayList(rl);
+        Hallway.drawHListWall(world, hl);
+        Room.drawRoomList(world, rl);
+        Hallway.drawHListFloor(world, hl);
+        Position door = Room.lockedDoor(world, rl, random);
+        world[door.x][door.y] = Tileset.LOCKED_DOOR;
 
-		return world;
+        return world;
+    }
+
+
+    private void processInput(String input) {
+        if (input == null) {
+            throw new RuntimeException("No input given.");
+        }
+
+        String first = Character.toString(input.charAt(0));
+        first = first.toLowerCase(); // normalize an input to lower case
+        processString(first);
+
+        if (input.length() > 1) {
+            String rest = input.substring(1);
+            processInput(rest); // recursive call until input ends
+        }
 	}
+    private void processString(String first) {
+        if (first.equals("n")) { // start and initializes new game
 
-
-	private void processInput(String input) {
-		if (input == null) {
-			throw new RuntimeException("No input given.");
-		}
-
-		String first = Character.toString(input.charAt(0));
-		first = first.toLowerCase(); // normalize an input to lower case
-		processString(first);
-
-		if (input.length() > 1) {
-			String rest = input.substring(1);
-			processInput(rest); // recursive call until input ends
-		}
-
-	}
-	private void processString(String first) {
-		if (first.equals("n")) { // start and initializes new game
-
-		} else if (first.equals("s")) { // generate a randomized world
+        } else if (first.equals("s")) { // generate a randomized world
 
 //        } else if (first == "l") {
 //            load();
@@ -64,16 +63,15 @@ public class Game {
 //            setQuitFlag();
 //        } else if (first == "q") {
 //            quit();
-		} else {                // append next seed integer to seedString
-			try {
-				Long.parseLong(first);
-				seedString += first;
-			} catch (NumberFormatException e) { // throw error if invalid input given
-				throw new RuntimeException("Invalid input given: " + first);
-			}
-		}
-
-	}
+        } else {                // append next seed integer to seedString
+            try {
+                Long.parseLong(first);
+                seedString += first;
+            } catch (NumberFormatException e) { // throw error if invalid input given
+                throw new RuntimeException("Invalid input given: " + first);
+            }
+        }
+    }
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -94,8 +92,8 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-	    processInput(input);
-	    long seed = Long.parseLong(seedString);
+        processInput(input);
+        long seed = Long.parseLong(seedString);
         TETile[][] finalWorldFrame = worldGenerate(seed);
         return finalWorldFrame;
     }
