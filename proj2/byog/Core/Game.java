@@ -13,6 +13,7 @@ public class Game {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
 	public static final int NUM = 25;
+	private String seedString = "";
 
 	private TETile[][] worldGenerate(long seed) {
 		Random random = new Random(seed);
@@ -36,7 +37,7 @@ public class Game {
 		return world;
 	}
 
-/*
+
 	private void processInput(String input) {
 		if (input == null) {
 			throw new RuntimeException("No input given.");
@@ -54,9 +55,9 @@ public class Game {
 	}
 	private void processString(String first) {
 		if (first.equals("n")) { // start and initializes new game
-			switchNewWorldFlag();
+
 		} else if (first.equals("s")) { // generate a randomized world
-			generate();
+
 //        } else if (first == "l") {
 //            load();
 //        } else if (first == ":") {
@@ -68,7 +69,7 @@ public class Game {
 				Long.parseLong(first);
 				seedString += first;
 			} catch (NumberFormatException e) { // throw error if invalid input given
-				throw new InvalidInputException("Invalid input given: " + first);
+				throw new RuntimeException("Invalid input given: " + first);
 			}
 		}
 
@@ -97,7 +98,8 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-	    long seed = Long.parseLong(input.replaceAll("[^0-9]", ""));
+	    processInput(input);
+	    long seed = Long.parseLong(seedString);
         TETile[][] finalWorldFrame = worldGenerate(seed);
         return finalWorldFrame;
     }

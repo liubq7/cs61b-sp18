@@ -7,28 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class WorldGenerator {
-    // TODO: 修改是否需要
-    private int width;
-    private int height;
-
-    // TODO: 修改是否需要
-    public WorldGenerator(int w, int h) {
-        width = w;
-        height = h;
-    }
-
-    // TODO: 修改是否需要
-    private void background(int width, int height) {
-        TETile[][] world = new TETile[width][height];
-        for (int x = 0; x < width; x += 1) {
-            for (int y = 0; y < height; y += 1) {
-                world[x][y] = Tileset.NOTHING;
-            }
-        }
-    }
-
-
-
+    // just for test
 
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
