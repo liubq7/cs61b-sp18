@@ -5,7 +5,6 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Hallway {
     /* start在左边，corner与start同y */

@@ -64,7 +64,7 @@ public class Room {
         Position[] cp = rr.cornerPosition();
         for (Position P : cp) {
             if (P.x > ww - 1 || P.y > wh - 1) {
-                rr = new Room(p, 4,4);
+                rr = new Room(p, 4, 4);
                 break;
             }
         }
@@ -94,7 +94,7 @@ public class Room {
         for (int x = p.x; x < p.x + w; x += 1) {
             for (int y = p.y; y < p.y + h; y += 1) {
                 if (x == p.x || x == p.x + w - 1 || y == p.y || y == p.y + h - 1) {
-                    world[x][y] =Tileset.WALL;
+                    world[x][y] = Tileset.WALL;
                 } else {
                     world[x][y] = Tileset.FLOOR;
                 }
@@ -108,7 +108,7 @@ public class Room {
         for (int x = p.x; x < p.x + w; x += 1) {
             for (int y = p.y; y < p.y + h; y += 1) {
                 if (x == p.x || x == p.x + w - 1 || y == p.y || y == p.y + h - 1) {
-                    world[x][y] =Tileset.WALL;
+                    world[x][y] = Tileset.WALL;
                 } else {
                     world[x][y] = Tileset.FLOOR;
                 }
@@ -142,14 +142,14 @@ public class Room {
                     break;
                 }
             }
-            if (available == true) {
+            if (available) {
                 rl.add(rr);
             }
         }
         return rl;
     }
 
-    private static class roomComparator implements Comparator<Room> {
+    private static class RoomComparator implements Comparator<Room> {
         /* 比较r1与r2 randompos的x+y，r1比r2小则返回负数 */
         @Override
         public int compare(Room r1, Room r2) {
@@ -167,7 +167,7 @@ public class Room {
      */
     public static ArrayList<Room> roomList(TETile[][] world, int num, Random random) {
         ArrayList<Room> rl = generateRoomList(world, num, random);
-        roomComparator cp = new roomComparator();
+        RoomComparator cp = new RoomComparator();
         rl.sort(cp);
         return rl;
     }
