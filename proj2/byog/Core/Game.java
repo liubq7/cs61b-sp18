@@ -51,7 +51,7 @@ public class Game {
             String rest = input.substring(1);
             processInput(rest); // recursive call until input ends
         }
-	}
+    }
     private void processString(String first) {
         if (first.equals("n")) { // start and initializes new game
 
