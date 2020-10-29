@@ -47,8 +47,11 @@ public class Percolation {
             );
         }
         int indexIn1D = xyTo1D(row, col);
-        openGridIn1D[indexIn1D] = true;
-        numOfOpen += 1;
+        if (!isOpen(row, col)) {
+            openGridIn1D[indexIn1D] = true;
+            numOfOpen += 1;
+        }
+
 
         updateConnection(row, col, row - 1, col);
         updateConnection(row, col, row + 1, col);
