@@ -40,7 +40,7 @@ public class PercolationStats {
                     percolation.open(row, col);
                 }
             }
-            double threshold = percolation.numberOfOpenSites() / (N * N);
+            double threshold = (double) percolation.numberOfOpenSites() / (N * N);
             thresholds[t] = threshold;
         }
     }
