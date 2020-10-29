@@ -26,6 +26,8 @@ public class PercolationStats {
         this.T = T;
         this.pf = pf;
         thresholds = new double[T];
+
+        simulate();
     }
 
     private void simulate() {
