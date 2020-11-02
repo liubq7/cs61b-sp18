@@ -7,7 +7,7 @@ import java.util.Set;
  *  A hash table-backed Map implementation. Provides amortized constant time
  *  access to elements via get(), remove(), and put() in the best case.
  *
- *  @author Your name here
+ *  @author Beiqian
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
@@ -53,19 +53,54 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("argument to get() is null");
+        }
+        int i = hash(key);
+        return buckets[i].get(key);
     }
 
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) {
+            throw new IllegalArgumentException("argument to put() is null");
+        }
+        if (value == null) {
+            remove(key);
+            return;
+        }
+
+        if (get(key) == null) {
+            size += 1;
+        }
+        int i = hash(key);
+        buckets[i].put(key, value);
+
+
+        if (loadFactor() >= MAX_LF) {
+            resize(buckets.length * 2);
+        }
+    }
+
+    private void resize(int chains) {
+        ArrayMap<K, V>[] newBuckets = new ArrayMap[chains];
+        for (int i = 0; i < chains; i += 1) {
+            newBuckets[i] = new ArrayMap<>();
+        }
+        for (int i = 0; i < buckets.length; i++) {
+            for (K key : buckets[i].keySet()) {
+                int j = Math.floorMod(key.hashCode(), chains);
+                newBuckets[j].put(key, get(key));
+            }
+        }
+        buckets = newBuckets;
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
