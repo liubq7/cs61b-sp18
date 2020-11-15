@@ -44,7 +44,6 @@ public class Solver {
 
         while (!pq.isEmpty()) {
             currentNode = pq.delMin();
-            solution.add(currentNode.state);
             if (currentNode.state.isGoal()) {
                 break;
             }
@@ -54,6 +53,14 @@ public class Solver {
                     pq.insert(nextNode);
                 }
             }
+        }
+
+        Stack<WorldState> path = new Stack<>();
+        for (SearchNode n = currentNode; n != null; n = n.prev) {
+            path.push(n.state);
+        }
+        while (!path.isEmpty()) {
+            solution.add(path.pop());
         }
     }
 
