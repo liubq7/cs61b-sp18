@@ -40,6 +40,7 @@ public class Board implements WorldState {
      * Returns the neighbors of the current board
      * @author http://joshh.ug/neighbors.html
      */
+    @Override
     public Iterable<WorldState> neighbors() {
         Queue<WorldState> neighbors = new Queue<>();
         int hug = size();
@@ -108,7 +109,7 @@ public class Board implements WorldState {
                 }
                 if (actual != expected) {
                     int expectedRow = (actual - 1) / N;
-                    int expecredCol = actual % N - 1;
+                    int expecredCol = (actual - 1) % N;
                     manhattan += Math.abs(expectedRow - i);
                     manhattan += Math.abs(expecredCol - j);
                 }
