@@ -5,29 +5,32 @@ import java.util.*;
 
 public class Solver {
     private List<WorldState> solution = new ArrayList<>();
+    private int searchCnt = 1;
+
+    public int getSearchCnt() {
+        return searchCnt;
+    }
 
     private class SearchNode {
         private WorldState state;
         private int moves;
         private SearchNode prev;
+        private int edtg;
 
         private SearchNode(WorldState state, int moves, SearchNode prev) {
             this.state = state;
             this.moves = moves;
             this.prev = prev;
+            edtg = state.estimatedDistanceToGoal();
         }
     }
 
     private class NodeComparator implements Comparator<SearchNode> {
         @Override
         public int compare(SearchNode n1, SearchNode n2) {
-            int priority1 = n1.moves + edtg(n1);
-            int priority2 = n2.moves + edtg(n2);
+            int priority1 = n1.moves + n1.edtg;
+            int priority2 = n2.moves + n2.edtg;
             return priority1 - priority2;
-        }
-
-        private int edtg(SearchNode n) {
-            return n.state.estimatedDistanceToGoal();
         }
     }
 
@@ -51,6 +54,7 @@ public class Solver {
                 if (currentNode.prev == null || !nextState.equals(currentNode.prev.state)) {
                     SearchNode nextNode = new SearchNode(nextState, currentNode.moves + 1, currentNode);
                     pq.insert(nextNode);
+                    searchCnt += 1;
                 }
             }
         }
