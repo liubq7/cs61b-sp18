@@ -52,6 +52,7 @@ public class Solver {
             }
             for (WorldState nextState : currentNode.state.neighbors()) {
                 if (currentNode.prev == null || !nextState.equals(currentNode.prev.state)) {
+                    // BUG: should compare disTo first, but no big difference here. See lab11 MazeAStarPath.
                     SearchNode nextNode = new SearchNode(nextState, currentNode.moves + 1, currentNode);
                     pq.insert(nextNode);
                     searchCnt += 1;
