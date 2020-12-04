@@ -8,9 +8,16 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
+    private static double[] depthDPP = new double[8];
+    private static final double ROOT_LRLON = MapServer.ROOT_LRLON, ROOT_ULLON = MapServer.ROOT_ULLON,
+            ROOT_LRLAT = MapServer.ROOT_LRLAT, ROOT_ULLAT = MapServer.ROOT_ULLAT;
 
     public Rasterer() {
-        // YOUR CODE HERE
+        double LonDPP = (ROOT_LRLON - ROOT_ULLON) / MapServer.TILE_SIZE;
+        for (int i = 0; i < depthDPP.length; i++) {
+            depthDPP[i] = LonDPP;
+            LonDPP /= 2;
+        }
     }
 
     /**
@@ -42,11 +49,80 @@ public class Rasterer {
      *                    forget to set this to true on success! <br>
      */
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
-        // System.out.println(params);
+        System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
-                           + "your browser.");
+
+        double requestedULLon = params.get("ullon");
+        double requestedULLat = params.get("ullat");
+        double requestedLRLon = params.get("lrlon");
+        double requestedLRLat = params.get("lrlat");
+
+        if (requestedLRLon <= ROOT_ULLON || requestedLRLat >= ROOT_ULLAT
+                || requestedULLon >= ROOT_LRLON || requestedULLat <= ROOT_LRLAT
+                || requestedULLon >= requestedLRLon || requestedLRLat >= requestedULLat) {
+            results.put("render_grid", null);
+            results.put("raster_ul_lon", 0);
+            results.put("raster_ul_lat", 0);
+            results.put("raster_lr_lon", 0);
+            results.put("raster_lr_lat", 0);
+            results.put("depth", 0);
+            results.put("query_success", false);
+            return results;
+        }
+
+        double requestedLonDPP = (requestedLRLon - requestedULLon) / params.get("w");
+        int depth = getDepth(requestedLonDPP);
+        double intervalX = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+        double intervalY = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+
+        int xUL = (int) ((requestedULLon - ROOT_ULLON) / intervalX);
+        int xLR = (int) ((requestedLRLon - ROOT_ULLON) / intervalX);
+        int yUL = (int) ((ROOT_ULLAT - requestedULLat) / intervalY);
+        int yLR = (int) ((ROOT_ULLAT - requestedLRLat) / intervalY);
+        if (xUL < 0) {
+            xUL = 0;
+        }
+        if (xLR > Math.pow(2, depth) - 1) {
+            xLR = (int) Math.pow(2, depth) - 1;
+        }
+        if (yUL < 0) {
+            yUL = 0;
+        }
+        if (yLR > Math.pow(2, depth) - 1) {
+            yLR = (int) Math.pow(2, depth) - 1;
+        }
+
+        double ULLon = ROOT_ULLON + intervalX * xUL;
+        double ULLat = ROOT_ULLAT + intervalY * yUL;
+        double LRLon = ROOT_ULLON + (intervalX + 1) * xLR;
+        double LRLat = ROOT_ULLAT + (intervalY + 1) * yLR;
+
+        String[][] renderGrid = new String[yLR - yUL + 1][xLR - xUL + 1];
+        for (int j = 0; j < yLR - yUL + 1; j++) {
+            for (int i = 0; i < xLR - xUL + 1; i++) {
+                int x = xUL + i;
+                int y = yUL + j;
+                renderGrid[j][i] = "d" + depth +"_x" + x + "_y" + y + ".png";
+                System.out.println(renderGrid[j][i]);
+            }
+        }
+        results.put("render_grid", renderGrid);
+        results.put("raster_ul_lon", ULLon);
+        results.put("raster_ul_lat", ULLat);
+        results.put("raster_lr_lon", LRLon);
+        results.put("raster_lr_lat", LRLat);
+        results.put("depth", depth);
+        results.put("query_success", true);
+
         return results;
+    }
+
+    private int getDepth(double requestedLonDPP) {
+        int depth = 0;
+        while (depthDPP[depth] > requestedLonDPP && depth < depthDPP.length - 1) {
+            depth += 1;
+        }
+        return depth;
     }
 
 }
