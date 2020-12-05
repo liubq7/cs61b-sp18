@@ -49,7 +49,7 @@ public class Rasterer {
      *                    forget to set this to true on success! <br>
      */
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
-        System.out.println(params);
+//        System.out.println(params);
         Map<String, Object> results = new HashMap<>();
 
         double requestedULLon = params.get("ullon");
@@ -94,16 +94,16 @@ public class Rasterer {
 
         double ULLon = ROOT_ULLON + intervalX * xUL;
         double ULLat = ROOT_ULLAT + intervalY * yUL;
-        double LRLon = ROOT_ULLON + (intervalX + 1) * xLR;
-        double LRLat = ROOT_ULLAT + (intervalY + 1) * yLR;
+        double LRLon = ROOT_ULLON + intervalX * (xLR + 1);
+        double LRLat = ROOT_ULLAT + intervalY * (yLR + 1);
 
         String[][] renderGrid = new String[yLR - yUL + 1][xLR - xUL + 1];
         for (int j = 0; j < yLR - yUL + 1; j++) {
             for (int i = 0; i < xLR - xUL + 1; i++) {
                 int x = xUL + i;
                 int y = yUL + j;
-                renderGrid[j][i] = "d" + depth +"_x" + x + "_y" + y + ".png";
-                System.out.println(renderGrid[j][i]);
+                renderGrid[j][i] = "d" + depth + "_x" + x + "_y" + y + ".png";
+//                System.out.println(renderGrid[j][i]);
             }
         }
         results.put("render_grid", renderGrid);
