@@ -93,9 +93,9 @@ public class Rasterer {
         }
 
         double ULLon = ROOT_ULLON + intervalX * xUL;
-        double ULLat = ROOT_ULLAT + intervalY * yUL;
+        double ULLat = ROOT_LRLAT + intervalY * (yUL + 1);
         double LRLon = ROOT_ULLON + intervalX * (xLR + 1);
-        double LRLat = ROOT_ULLAT + intervalY * (yLR + 1);
+        double LRLat = ROOT_LRLAT + intervalY * yLR;
 
         String[][] renderGrid = new String[yLR - yUL + 1][xLR - xUL + 1];
         for (int j = 0; j < yLR - yUL + 1; j++) {
