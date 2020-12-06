@@ -72,13 +72,14 @@ public class Rasterer {
 
         double requestedLonDPP = (requestedLRLon - requestedULLon) / params.get("w");
         int depth = getDepth(requestedLonDPP);
+        int n = (int) Math.pow(2, depth);
         double intervalX = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
         double intervalY = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
 
         int xUL = (int) ((requestedULLon - ROOT_ULLON) / intervalX);
-        int xLR = (int) ((requestedLRLon - ROOT_ULLON) / intervalX);
+        int xLR = n - 1 - (int) ((requestedLRLon - ROOT_ULLON) / intervalX);
         int yUL = (int) ((ROOT_ULLAT - requestedULLat) / intervalY);
-        int yLR = (int) ((ROOT_ULLAT - requestedLRLat) / intervalY);
+        int yLR = n - 1 - (int) ((requestedLRLat - ROOT_LRLAT) / intervalY);
         if (xUL < 0) {
             xUL = 0;
         }
