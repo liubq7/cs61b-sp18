@@ -77,7 +77,7 @@ public class Rasterer {
         double intervalY = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
 
         int xUL = (int) ((requestedULLon - ROOT_ULLON) / intervalX);
-        int xLR = n - 1 - (int) ((requestedLRLon - ROOT_ULLON) / intervalX);
+        int xLR = n - 1 - (int) ((ROOT_LRLON - requestedLRLon) / intervalX);
         int yUL = (int) ((ROOT_ULLAT - requestedULLat) / intervalY);
         int yLR = n - 1 - (int) ((requestedLRLat - ROOT_LRLAT) / intervalY);
         if (xUL < 0) {
