@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -15,11 +15,13 @@ import java.util.ArrayList;
  * methods. You'll also need to include instance variables and methods for
  * modifying the graph (e.g. addNode and addEdge).
  *
- * @author Alan Yao, Josh Hug
+ * @author Beiqian Liu, Alan Yao, Josh Hug
  */
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
+    private final Map<Long, Node> nodes = new HashMap<>();
+    private final KdTree kdTree = new KdTree();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -40,6 +42,9 @@ public class GraphDB {
             e.printStackTrace();
         }
         clean();
+        for (long id : nodes.keySet()) {
+            kdTree.insert(nodes.get(id));
+        }
     }
 
     /**
@@ -58,6 +63,13 @@ public class GraphDB {
      */
     private void clean() {
         // TODO: Your code here.
+        Iterator<Long> iterator = nodes.keySet().iterator();
+        while (iterator.hasNext()) {
+            long id = iterator.next();
+            if (nodes.get(id).adj.isEmpty()) {
+                iterator.remove();
+            }
+        }
     }
 
     /**
@@ -66,7 +78,11 @@ public class GraphDB {
      */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        ArrayList<Long> IDs = new ArrayList<>();
+        for (long id : nodes.keySet()) {
+            IDs.add(id);
+        }
+        return IDs;
     }
 
     /**
@@ -75,7 +91,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return nodes.get(v).adj;
     }
 
     /**
@@ -88,6 +104,9 @@ public class GraphDB {
      */
     double distance(long v, long w) {
         return distance(lon(v), lat(v), lon(w), lat(w));
+    }
+    static double distance(Node n1, Node n2) {
+        return distance(n1.lon, n1.lat, n2.lon, n2.lat);
     }
 
     static double distance(double lonV, double latV, double lonW, double latW) {
@@ -136,7 +155,8 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        Node goal = new Node(lon, lat);
+        return kdTree.nearest(kdTree.root, goal, kdTree.root).point.id;
     }
 
     /**
@@ -145,7 +165,7 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return nodes.get(v).lon;
     }
 
     /**
@@ -154,6 +174,49 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return nodes.get(v).lat;
+    }
+
+    void addNode(Node n) {
+        nodes.put(n.id, n);
+    }
+
+    void addEdge(long n1, long n2) {
+        nodes.get(n1).adj.add(n2);
+        nodes.get(n2).adj.add(n1);
+    }
+
+    void removeNode(Node n) {
+        nodes.remove(n.id);
+    }
+
+    static class Node {
+        long id;
+        double lon;
+        double lat;
+        String location;
+        ArrayList<Long> adj = new ArrayList<>();
+
+        Node(long id, double lon, double lat) {
+            this.id = id;
+            this.lon = lon;
+            this.lat = lat;
+        }
+        Node(double lon, double lat) {
+            this.lon = lon;
+            this.lat = lat;
+        }
+    }
+
+    // TODO: way要怎么store?
+    static class Way {
+        long id;
+        ArrayList<Long> nds;
+        String name;
+
+        Way(long id) {
+            this.id = id;
+            nds = new ArrayList<>();
+        }
     }
 }
