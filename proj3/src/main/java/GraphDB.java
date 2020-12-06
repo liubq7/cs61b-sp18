@@ -20,8 +20,8 @@ import java.util.*;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
-    private final Map<Long, Node> nodes = new HashMap<>();
-    private final KdTree kdTree = new KdTree();
+    private Map<Long, Node> nodes = new HashMap<>();
+    private KdTree kdTree = new KdTree();
 
     /**
      * Example constructor shows how to create and start an XML parser.
