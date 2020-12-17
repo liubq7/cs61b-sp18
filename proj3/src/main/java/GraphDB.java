@@ -213,7 +213,15 @@ public class GraphDB {
     private class nodeComparator implements Comparator<Long> {
         @Override
         public int compare(Long n1, Long n2) {
-            return (int) (nodes.get(n1).priority - nodes.get(n2).priority);
+            double result = nodes.get(n1).priority - nodes.get(n2).priority;
+            if (result > 0) {
+                return 1;
+            } else if (result < 0) {
+                return -1;
+            } else {
+                return 0;
+            }
+//            return (int) (nodes.get(n1).priority - nodes.get(n2).priority);
         }
     }
 
