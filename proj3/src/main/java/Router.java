@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,8 +24,51 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+        long stNode = g.closest(stlon, stlat);
+        long destNode = g.closest(destlon, destlat);
+        Map<Long, Long> edgeTo = new HashMap<>();
+        Map<Long, Double> distTo = new HashMap<>();
+        PriorityQueue<Long> pq = new PriorityQueue<>(g.getNodeComparator());
+
+        Map<Long, GraphDB.Node> nodes = g.getNodes();
+
+        for (Long id : nodes.keySet()) {
+            if (id == stNode) {
+                distTo.put(id, 0.0);
+            } else {
+                distTo.put(id, Double.POSITIVE_INFINITY);
+            }
+            nodes.get(id).priority = distTo.get(id) + g.distance(id, destNode);
+            pq.add(id);
+        }
+        while (!pq.isEmpty()) {
+            long curr = pq.remove();
+            if (curr == destNode) {
+                break;
+            }
+            Iterable<Long> adj = g.adjacent(curr);
+            for (Long next : adj) {
+                double newPriority = distTo.get(curr) + g.distance(curr, next) + g.distance(next, destNode);
+                if (newPriority < nodes.get(next).priority) {
+                    nodes.get(next).priority = newPriority;
+                    pq.remove(next);
+                    pq.add(next);
+                    edgeTo.put(next, curr);
+                    distTo.put(next, distTo.get(curr) + g.distance(curr, next));
+                }
+            }
+        }
+
+        List<Long> path = new LinkedList<>();
+        long pointer = destNode;
+        path.add(pointer);
+        while (pointer != stNode) {
+            pointer = edgeTo.get(pointer);
+            path.add(0, pointer);
+        }
+        return path;
     }
+
 
     /**
      * Create the list of directions corresponding to a route on the graph.

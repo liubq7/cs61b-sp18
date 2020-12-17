@@ -197,6 +197,8 @@ public class GraphDB {
         String location;
         ArrayList<Long> adj = new ArrayList<>();
 
+        double priority;
+
         Node(long id, double lon, double lat) {
             this.id = id;
             this.lon = lon;
@@ -206,6 +208,21 @@ public class GraphDB {
             this.lon = lon;
             this.lat = lat;
         }
+    }
+
+    private class nodeComparator implements Comparator<Long> {
+        @Override
+        public int compare(Long n1, Long n2) {
+            return (int) (nodes.get(n1).priority - nodes.get(n2).priority);
+        }
+    }
+
+    public nodeComparator getNodeComparator() {
+        return new nodeComparator();
+    }
+
+    public Map<Long, Node> getNodes() {
+        return nodes;
     }
 
     // TODO: way要怎么store?
