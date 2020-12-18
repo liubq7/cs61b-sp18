@@ -28,6 +28,7 @@ public class Router {
         long destNode = g.closest(destlon, destlat);
         Map<Long, Long> edgeTo = new HashMap<>();
         Map<Long, Double> distTo = new HashMap<>();
+        HashSet<Long> marked = new HashSet<>();
         PriorityQueue<Long> pq = new PriorityQueue<>(g.getNodeComparator());
 
         Map<Long, GraphDB.Node> nodes = g.getNodes();
@@ -38,23 +39,25 @@ public class Router {
             } else {
                 distTo.put(id, Double.POSITIVE_INFINITY);
             }
-            nodes.get(id).priority = distTo.get(id) + g.distance(id, destNode);
-            pq.add(id);
         }
+        pq.add(stNode);
         while (!pq.isEmpty()) {
             long curr = pq.remove();
+            if (marked.contains(curr)) {
+                continue;
+            }
+            marked.add(curr);
             if (curr == destNode) {
                 break;
             }
             Iterable<Long> adj = g.adjacent(curr);
             for (Long next : adj) {
-                double newPriority = distTo.get(curr) + g.distance(curr, next) + g.distance(next, destNode);
-                if (newPriority < nodes.get(next).priority) {
-                    nodes.get(next).priority = newPriority;
-                    pq.remove(next);
+                double newDistTo = distTo.get(curr) + g.distance(curr, next);
+                if (newDistTo < distTo.get(next)) {
+                    nodes.get(next).priority = newDistTo + g.distance(next, destNode);
                     pq.add(next);
                     edgeTo.put(next, curr);
-                    distTo.put(next, distTo.get(curr) + g.distance(curr, next));
+                    distTo.put(next, newDistTo);
                 }
             }
         }
