@@ -63,7 +63,6 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
         Iterator<Long> iterator = nodes.keySet().iterator();
         while (iterator.hasNext()) {
             long id = iterator.next();
@@ -233,10 +232,6 @@ public class GraphDB {
 
     public Map<Long, Node> getNodes() {
         return nodes;
-    }
-
-    public Map<Long, Way> getAllWays() {
-        return allWays;
     }
 
 

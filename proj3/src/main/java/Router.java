@@ -83,13 +83,13 @@ public class Router {
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
         List<NavigationDirection> navDirections = new LinkedList<>();
-        Map<Long, GraphDB.Way> ways = g.getAllWays();
         String currWayName;
         String prevWayName = "";
         double currBearing;
         double prevBearing = 0;
         double dist = 0;
         NavigationDirection navDirection = new NavigationDirection();
+
         for (int i = 0; i < route.size() - 1; i++) {
             long curr = route.get(i);
             long next = route.get(i + 1);
@@ -144,14 +144,13 @@ public class Router {
         return navDirections;
     }
 
-    private static NavigationDirection copy(NavigationDirection navDirction) {
+    private static NavigationDirection copy(NavigationDirection navDirection) {
         NavigationDirection newNavDirection = new NavigationDirection();
-        newNavDirection.direction = navDirction.direction;
-        newNavDirection.way = navDirction.way;
-        newNavDirection.distance = navDirction.distance;
+        newNavDirection.direction = navDirection.direction;
+        newNavDirection.way = navDirection.way;
+        newNavDirection.distance = navDirection.distance;
         return newNavDirection;
     }
-
 
     /**
      * Class to represent a navigation direction, which consists of 3 attributes:

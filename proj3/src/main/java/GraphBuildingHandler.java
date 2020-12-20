@@ -115,7 +115,6 @@ public class GraphBuildingHandler extends DefaultHandler {
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
                 if (ALLOWED_HIGHWAY_TYPES.contains(v)) {
-                    // TODO: connect nodes, valid
                     for (int i = 0; i < currWay.nds.size() - 1; i++) {
                         g.addEdge(currWay.nds.get(i), currWay.nds.get(i + 1));
                     }
