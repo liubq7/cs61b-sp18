@@ -2,10 +2,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  Parses OSM XML files using an XML SAX parser. Used to construct the graph of roads for
@@ -88,6 +85,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             activeState = "way";
             long id = Long.parseLong(attributes.getValue("id"));
             GraphDB.Way way = new GraphDB.Way(id);
+            g.addWay(way);
             currWay = way;
 //            System.out.println("Beginning a way...");
         } else if (activeState.equals("way") && qName.equals("nd")) {
@@ -101,6 +99,8 @@ public class GraphBuildingHandler extends DefaultHandler {
             makes this way invalid. Instead, think of keeping a list of possible connections and
             remember whether this way is valid or not. */
             long id = Long.parseLong(attributes.getValue("ref"));
+            Map<Long, GraphDB.Node> nodes = g.getNodes();
+            nodes.get(id).ways.add(currWay.id);
             currWay.nds.add(id);
 
         } else if (activeState.equals("way") && qName.equals("tag")) {

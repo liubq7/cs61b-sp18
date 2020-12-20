@@ -82,7 +82,74 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        return null; // FIXME
+        List<NavigationDirection> navDirections = new LinkedList<>();
+        Map<Long, GraphDB.Way> ways = g.getAllWays();
+        String currWayName;
+        String prevWayName = "";
+        double currBearing;
+        double prevBearing = 0;
+        double dist = 0;
+        NavigationDirection navDirection = new NavigationDirection();
+        for (int i = 0; i < route.size() - 1; i++) {
+            long curr = route.get(i);
+            long next = route.get(i + 1);
+            currWayName = g.getWayName(curr, next);
+            currBearing = g.bearing(curr, next);
+
+            if (currWayName.equals(prevWayName)) {
+                dist += g.distance(curr, next);
+            } else if (i == 0) {
+                navDirection.direction = 0;
+                navDirection.way = currWayName;
+                dist += g.distance(curr, next);
+            } else {
+                navDirection.distance = dist;
+                NavigationDirection newNavDirection = copy(navDirection);
+                navDirections.add(newNavDirection);
+
+                dist = g.distance(curr, next);
+                navDirection.way = currWayName;
+
+                double relativeBearing = currBearing - prevBearing;
+                if (relativeBearing > 180) {
+                    relativeBearing -= 360;
+                } else if (relativeBearing < -180) {
+                    relativeBearing += 360;
+                }
+
+                if (relativeBearing < -100) {
+                    navDirection.direction = 7;
+                } else if (relativeBearing < -30) {
+                    navDirection.direction = 4;
+                } else if (relativeBearing < -15) {
+                    navDirection.direction = 3;
+                } else if (relativeBearing < 15) {
+                    navDirection.direction = 1;
+                } else if (relativeBearing < 30) {
+                    navDirection.direction = 2;
+                } else if (relativeBearing < 100) {
+                    navDirection.direction = 5;
+                } else {
+                    navDirection.direction = 6;
+                }
+            }
+            if (i == route.size() - 2) {
+                navDirection.distance = dist;
+                navDirections.add(navDirection);
+            }
+            prevWayName = currWayName;
+            prevBearing = currBearing;
+        }
+
+        return navDirections;
+    }
+
+    private static NavigationDirection copy(NavigationDirection navDirction) {
+        NavigationDirection newNavDirection = new NavigationDirection();
+        newNavDirection.direction = navDirction.direction;
+        newNavDirection.way = navDirction.way;
+        newNavDirection.distance = navDirction.distance;
+        return newNavDirection;
     }
 
 

@@ -21,6 +21,7 @@ public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
     private Map<Long, Node> nodes = new HashMap<>();
+    private Map<Long, Way> allWays = new HashMap<>();
     private KdTree kdTree = new KdTree();
 
     /**
@@ -196,6 +197,7 @@ public class GraphDB {
         double lat;
         String location;
         ArrayList<Long> adj = new ArrayList<>();
+        ArrayList<Long> ways = new ArrayList<>();
 
         double priority;
 
@@ -233,7 +235,11 @@ public class GraphDB {
         return nodes;
     }
 
-    // TODO: way要怎么store?
+    public Map<Long, Way> getAllWays() {
+        return allWays;
+    }
+
+
     static class Way {
         long id;
         ArrayList<Long> nds;
@@ -243,5 +249,27 @@ public class GraphDB {
             this.id = id;
             nds = new ArrayList<>();
         }
+    }
+
+    public void addWay(Way way) {
+        allWays.put(way.id, way);
+    }
+
+    public String getWayName(long v, long w) {
+        Node vNode = nodes.get(v);
+        Node wNode = nodes.get(w);
+        for (long id1 : vNode.ways) {
+            for (long id2: wNode.ways) {
+                if (id1 == id2) {
+                    String wayName = allWays.get(id1).name;
+                    if (wayName == null) {
+                        return "unknown road";
+                    } else {
+                        return wayName;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
