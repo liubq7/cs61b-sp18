@@ -285,20 +285,7 @@ public class MapServer {
      * cleaned <code>prefix</code>.
      */
     public static List<String> getLocationsByPrefix(String prefix) {
-//        StringBuffer sb = new StringBuffer();
-//        for(int i = 0; i < prefix.length(); i++) {
-//            char c = prefix.charAt(i);
-//            if(c > 64 && c < 91) {
-////                c = Character.toLowerCase(c);
-//                sb.append(c);
-//            } else if (c > 96 && c < 123) {
-//                c = Character.toUpperCase(c);
-//                sb.append(c);
-//            } else if (c == 32) {
-//                sb.append(c);
-//            }
-//        }
-//        prefix = sb.toString();
+        prefix = prefix.toLowerCase();
 
         Tries tries = graph.getTries();
         List<String> results = tries.withPrefix(prefix);

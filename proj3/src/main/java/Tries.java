@@ -9,12 +9,13 @@ public class Tries {
     private class TrieNode {
         private Boolean isKey = false;
         private Map<Character, TrieNode> links = new HashMap<>();
+        private String name;
     }
 
     public void add(String s) {
         TrieNode curr = root;
         for (int i = 0; i < s.length(); i++) {
-            Character c = s.charAt(i);
+            Character c = Character.toLowerCase(s.charAt(i));
             if (curr.links.containsKey(c)) {
                 curr = curr.links.get(c);
             } else {
@@ -24,6 +25,7 @@ public class Tries {
             }
         }
         curr.isKey = true;
+        curr.name = s;
     }
 
     public List<String> withPrefix(String prefix) {
@@ -49,7 +51,7 @@ public class Tries {
             return;
         }
         if (next.isKey) {
-            results.add(prefix.toString());
+            results.add(next.name);
         }
         for (Character c : next.links.keySet()) {
             prefix.append(c);
