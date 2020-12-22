@@ -4,12 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -305,7 +300,23 @@ public class MapServer {
      * "id" : Number, The id of the node. <br>
      */
     public static List<Map<String, Object>> getLocations(String locationName) {
-        return new LinkedList<>();
+        locationName = locationName.toLowerCase();
+        List<Map<String, Object>> results = new LinkedList<>();
+        Map<String, Object> locations = graph.getLocations();
+
+        if (locations.containsKey(locationName)) {
+            List<GraphDB.Node> nodes = (ArrayList) locations.get(locationName);
+            for (GraphDB.Node n : nodes) {
+                Map<String, Object> node = new HashMap<>();
+                node.put("lat", n.lat);
+                node.put("lon", n.lon);
+                node.put("name", n.location);
+                node.put("id", n.id);
+                results.add(node);
+            }
+        }
+        
+        return results;
     }
 
     /**

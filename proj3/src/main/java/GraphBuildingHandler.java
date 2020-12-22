@@ -135,6 +135,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             String loc = attributes.getValue("v");
             currNode.location = loc;
             g.addName(loc);
+            g.addLocation(currNode);
         }
     }
 

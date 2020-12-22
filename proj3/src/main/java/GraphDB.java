@@ -24,6 +24,7 @@ public class GraphDB {
     private Map<Long, Way> allWays = new HashMap<>();
     private KdTree kdTree = new KdTree();
     private Tries tries = new Tries();
+    private Map<String, Object> locations = new HashMap<>();
 
     /**
      * Example constructor shows how to create and start an XML parser.
@@ -54,9 +55,22 @@ public class GraphDB {
     }
 
     public void addName(String s) {
-        if (!s.equals("")) {
-            tries.add(s);
+        tries.add(s);
+    }
+
+    public void addLocation(Node n) {
+        String loc = n.location.toLowerCase();
+        if (locations.containsKey(loc)) {
+            ((ArrayList) locations.get(loc)).add(n);
+        } else {
+            List<Node> nodes = new ArrayList<>();
+            nodes.add(n);
+            locations.put(loc, nodes);
         }
+    }
+
+    public Map<String, Object> getLocations() {
+        return locations;
     }
 
     /**
