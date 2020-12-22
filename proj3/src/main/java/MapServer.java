@@ -21,7 +21,7 @@ import static spark.Spark.*;
  * requested images and routes. You should not need to modify this file unless you're
  * doing the Autocomplete part of the project, though you are welcome to do so.
  * This code is using BearMaps skeleton code version 2.0.
- * @author Alan Yao, Josh Hug
+ * @author Alan Yao, Josh Hug, Beiqian Liu
  */
 public class MapServer {
     /**
