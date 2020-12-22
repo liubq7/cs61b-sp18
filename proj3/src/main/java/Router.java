@@ -118,19 +118,19 @@ public class Router {
                 }
 
                 if (relativeBearing < -100) {
-                    navDirection.direction = 7;
+                    navDirection.direction = 6;
                 } else if (relativeBearing < -30) {
-                    navDirection.direction = 4;
+                    navDirection.direction = 5;
                 } else if (relativeBearing < -15) {
-                    navDirection.direction = 3;
+                    navDirection.direction = 2;
                 } else if (relativeBearing < 15) {
                     navDirection.direction = 1;
                 } else if (relativeBearing < 30) {
-                    navDirection.direction = 2;
+                    navDirection.direction = 3;
                 } else if (relativeBearing < 100) {
-                    navDirection.direction = 5;
+                    navDirection.direction = 4;
                 } else {
-                    navDirection.direction = 6;
+                    navDirection.direction = 7;
                 }
             }
             if (i == route.size() - 2) {
