@@ -96,8 +96,5 @@ public class CountingSort {
         }
 
         return sorted2;
-
-        // Another way: treat empty spaces as less than all other characters.
-        // Minus sign less than empty space.
     }
 }

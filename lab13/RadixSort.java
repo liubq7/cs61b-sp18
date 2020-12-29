@@ -1,7 +1,7 @@
 /**
  * Class for doing Radix sort
  *
- * @author Akhil Batra, Alexander Hwang
+ * @author Akhil Batra, Alexander Hwang, Beiqian Liu
  *
  */
 public class RadixSort {
@@ -16,8 +16,20 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
-        return null;
+        // Implement LSD Sort
+        int maxLen = 0;
+        for (String s : asciis) {
+            if (s.length() > maxLen) {
+                maxLen = s.length();
+            }
+        }
+
+        String[] sorted = asciis.clone();
+        for (int i = 0; i < maxLen; i++) {
+            sortHelperLSD(sorted, i);
+        }
+
+        return sorted;
     }
 
     /**
@@ -28,7 +40,38 @@ public class RadixSort {
      */
     private static void sortHelperLSD(String[] asciis, int index) {
         // Optional LSD helper method for required LSD radix sort
-        return;
+        int R = 256;
+        int counts[] = new int[R];
+        for (String s : asciis) {
+            int c = charAtLSD(s, index);
+            counts[c] += 1;
+        }
+
+        int[] starts = new int[R];
+        int pos = 0;
+        for (int i = 0; i < starts.length; i += 1) {
+            starts[i] = pos;
+            pos += counts[i];
+        }
+
+        String[] sorted = new String[asciis.length];
+        for (int i = 0; i < asciis.length; i += 1) {
+            String item = asciis[i];
+            int c = charAtLSD(asciis[i], index);
+            int place = starts[c];
+            sorted[place] = item;
+            starts[c] += 1;
+        }
+
+        asciis = sorted;
+    }
+
+    private static int charAtLSD(String s, int index) {
+        if (index >= s.length()) {
+            return 32;
+        } else {
+            return s.charAt(s.length() - index - 1);
+        }
     }
 
     /**
