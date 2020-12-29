@@ -70,7 +70,7 @@ public class RadixSort {
         if (index >= s.length()) {
             return 0;
         } else {
-            return s.charAt(s.length() - index - 1) + 1;
+            return s.charAt(index) + 1;
         }
     }
 
