@@ -63,7 +63,11 @@ public class RadixSort {
             starts[c] += 1;
         }
 
-        asciis = sorted;
+//        asciis = sorted;
+
+        for (int i = 0; i < asciis.length; i++) {
+            asciis[i] = sorted[i];
+        }
     }
 
     private static int charAtLSD(String s, int index) {
@@ -87,5 +91,30 @@ public class RadixSort {
     private static void sortHelperMSD(String[] asciis, int start, int end, int index) {
         // Optional MSD helper method for optional MSD radix sort
         return;
+    }
+
+
+    public static void main(String[] args) {
+        String[] asciis = new String[] { "56", "112", "94", "4", "9", "82", "394", "80" };
+        String[] res = RadixSort.sort(asciis);
+        for (String s : res) {
+            System.out.print(s + " ");
+        }
+
+        System.out.println();
+
+        String[] asciis2 = new String[] {"  ", "      ", "    ", " "};
+        String[] res2 = RadixSort.sort(asciis2);
+        for (String s : res2) {
+            System.out.print(s + ",");
+        }
+
+        System.out.println();
+
+        String[] asciis3 = new String[] {"ñ", "MGTn²"};
+        String[] res3 = RadixSort.sort(asciis3);
+        for (String s : res3) {
+            System.out.print(s + ",");
+        }
     }
 }
