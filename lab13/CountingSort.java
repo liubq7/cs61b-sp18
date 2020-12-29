@@ -1,7 +1,7 @@
 /**
  * Class with 2 ways of doing Counting sort, one naive way and one "better" way
  *
- * @author Akhil Batra, Alexander Hwang
+ * @author Akhil Batra, Alexander Hwang, Beiqian Liu
  *
  **/
 public class CountingSort {
@@ -64,9 +64,40 @@ public class CountingSort {
      * Does not touch original array (non-destructive method).
      *
      * @param arr int array that will be sorted
+     * @return the sorted array
      */
     public static int[] betterCountingSort(int[] arr) {
-        // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        // find max and min
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int i : arr) {
+            max = max > i ? max : i;
+            min = min < i ? min : i;
+        }
+
+        int[] counts = new int[max - min + 1];
+        for (int i : arr) {
+            counts[i - min]++;
+        }
+
+        int[] starts = new int[max - min + 1];
+        int pos = 0;
+        for (int i = 0; i < starts.length; i += 1) {
+            starts[i] = pos;
+            pos += counts[i];
+        }
+
+        int[] sorted2 = new int[arr.length];
+        for (int i = 0; i < arr.length; i += 1) {
+            int item = arr[i];
+            int place = starts[item - min];
+            sorted2[place] = item;
+            starts[item - min] += 1;
+        }
+
+        return sorted2;
+
+        // Another way: treat empty spaces as less than all other characters.
+        // Minus sign less than empty space.
     }
 }
