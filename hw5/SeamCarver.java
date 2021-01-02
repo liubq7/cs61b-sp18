@@ -32,26 +32,12 @@ public class SeamCarver {
     // energy of pixel at column x and row y
     public double energy(int x, int y) {
         Color left, right, up, down;
-        int[] neighborsX = getNeighbor(x, false);
-        int[] neighborsY = getNeighbor(y, true);
-        left = picture.get(neighborsX[0], y);
-        right = picture.get(neighborsX[1], y);
-        up = picture.get(x, neighborsY[0]);
-        down = picture.get(x, neighborsY[1]);
+        left = x > 0 ? picture.get(x - 1, y) : picture.get(width - 1, y);
+        right = x + 1 < width ? picture.get(x + 1, y) : picture.get(0, y);
+        up = y > 0 ? picture.get(x, y - 1) : picture.get(x, height - 1);
+        down = y + 1 < height ? picture.get(x, y + 1) : picture.get(x, 0);
 
         return gradient(left, right) + gradient(up, down);
-    }
-
-    private int[] getNeighbor(int n, boolean isY) {
-        int[] neighbors = new int[2];
-        if (isY) {
-            neighbors[0] = n > 0 ? n - 1 : height - 1;
-            neighbors[1] = n + 1 < height ? n + 1 : 0;
-        } else {
-            neighbors[0] = n > 0 ? n - 1 : width - 1;
-            neighbors[1] = n + 1 < width ? n + 1 : 0;
-        }
-        return neighbors;
     }
 
     private double gradient(Color c1, Color c2) {
@@ -119,12 +105,24 @@ public class SeamCarver {
     }
 
 
-
-
     // sequence of indices for horizontal seam
+    // transposing the image, running findVerticalSeam()
     public int[] findHorizontalSeam() {
-        return null;
+        int[] paths = transpose().findVerticalSeam();
+        return paths;
     }
+
+    private SeamCarver transpose() {
+        Picture trans = new Picture(height, width);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                trans.set(j, i, picture.get(i, j));
+            }
+        }
+        SeamCarver transpose = new SeamCarver(trans);
+        return transpose;
+    }
+
 
     // remove horizontal seam from picture
     public void removeHorizontalSeam(int[] seam) {
