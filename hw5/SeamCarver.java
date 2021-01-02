@@ -132,7 +132,9 @@ public class SeamCarver {
         if (seam.length != width || !isValidSeam(seam)) {
             throw new IllegalArgumentException();
         }
-        SeamRemover.removeHorizontalSeam(picture, findHorizontalSeam());
+        picture = SeamRemover.removeHorizontalSeam(picture, seam);
+        width = picture.width();
+        height = picture.height();
     }
 
     // remove vertical seam from picture
@@ -140,7 +142,9 @@ public class SeamCarver {
         if (seam.length != height || !isValidSeam(seam)) {
             throw new IllegalArgumentException();
         }
-        SeamRemover.removeVerticalSeam(picture, findVerticalSeam());
+        picture = SeamRemover.removeVerticalSeam(picture, seam);
+        width = picture.width();
+        height = picture.height();
     }
 
     private boolean isValidSeam(int[] seam) {
