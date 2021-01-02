@@ -31,6 +31,9 @@ public class SeamCarver {
 
     // energy of pixel at column x and row y
     public double energy(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            throw new IndexOutOfBoundsException();
+        }
         Color left, right, up, down;
         left = x > 0 ? picture.get(x - 1, y) : picture.get(width - 1, y);
         right = x + 1 < width ? picture.get(x + 1, y) : picture.get(0, y);
@@ -126,22 +129,26 @@ public class SeamCarver {
 
     // remove horizontal seam from picture
     public void removeHorizontalSeam(int[] seam) {
-
+        if (seam.length != width || !isValidSeam(seam)) {
+            throw new IllegalArgumentException();
+        }
+        SeamRemover.removeHorizontalSeam(picture, findHorizontalSeam());
     }
 
     // remove vertical seam from picture
     public void removeVerticalSeam(int[] seam) {
-
+        if (seam.length != height || !isValidSeam(seam)) {
+            throw new IllegalArgumentException();
+        }
+        SeamRemover.removeVerticalSeam(picture, findVerticalSeam());
     }
 
-    public static void main(String[] args) {
-        Picture p = new Picture("images/6x5.png");
-        SeamCarver sc = new SeamCarver(p);
-
-        int[] seam = sc.findVerticalSeam();
-        for (int i = 0; i < seam.length; i++) {
-            System.out.println(seam[i]);
+    private boolean isValidSeam(int[] seam) {
+        for (int i = 0; i < seam.length - 1; i++) {
+            if (Math.abs(seam[i] - seam[i + 1]) > 1) {
+                return false;
+            }
         }
-
+        return true;
     }
 }
