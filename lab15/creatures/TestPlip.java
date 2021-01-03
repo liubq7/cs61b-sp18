@@ -10,7 +10,7 @@ import huglife.Impassible;
 import huglife.Empty;
 
 /** Tests the plip class   
- *  @authr FIXME
+ *  @authr Beiqian Liu
  */
 
 public class TestPlip {
@@ -36,10 +36,14 @@ public class TestPlip {
 
     @Test
     public void testReplicate() {
-
+        Plip p = new Plip(2);
+        Plip offspring = p.replicate();
+        assertEquals(1, p.energy(), 0.01);
+        assertEquals(1, offspring.energy(), 0.01);
+        assertNotSame(p, offspring);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
         Plip p = new Plip(1.2);
         HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
@@ -55,6 +59,28 @@ public class TestPlip {
         Action actual = p.chooseAction(surrounded);
         Action expected = new Action(Action.ActionType.STAY);
 
+        assertEquals(expected, actual);
+
+
+        p = new Plip(1.2);
+        surrounded.put(Direction.TOP, new Empty());
+        surrounded.put(Direction.BOTTOM, new Impassible());
+        surrounded.put(Direction.LEFT, new Impassible());
+        surrounded.put(Direction.RIGHT, new Impassible());
+
+        actual = p.chooseAction(surrounded);
+        expected = new Action(Action.ActionType.REPLICATE, Direction.TOP);
+        assertEquals(expected, actual);
+
+
+        p = new Plip(0.7);
+        surrounded.put(Direction.TOP, new Empty());
+        surrounded.put(Direction.BOTTOM, new Impassible());
+        surrounded.put(Direction.LEFT, new Impassible());
+        surrounded.put(Direction.RIGHT, new Impassible());
+
+        actual = p.chooseAction(surrounded);
+        expected = new Action(Action.ActionType.STAY);
         assertEquals(expected, actual);
     }
 
