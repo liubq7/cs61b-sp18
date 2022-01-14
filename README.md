@@ -12,7 +12,7 @@ UC Berkeley CS 61B Data Structures, [Spring 2018](https://sp18.datastructur.es/)
 - proj1a: Linked List Deque(Double Ended Queue), Array Deque
 - proj1b: Test Driven Development, Interface
 - proj1gold: Randomized Testing, JUnit Message Generation
-- proj2]: Pseudo Random Generation, Interaction
+- proj2: Pseudo Random Generation, Interaction
 - proj3: Graph, Trie, K-d Tree, A\* algorithm, Heroku Deployment
 - hw1: Packages, Interfaces, Generics, Exceptions, Iteration
 - hw2: Percolation Simulation with Disjoint Set
