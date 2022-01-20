@@ -1,9 +1,8 @@
 # CS61B
 
-UC Berkeley CS 61B Data Structures, [Spring 2018](https://sp18.datastructur.es/)
+UC Berkeley CS 61B Data Structures, Spring 2018
 
 - More details about Project 3 please see [this repo](https://github.com/liubq7/BearMaps)
-- [Study Notes](https://github.com/xiaoyang-liu-cs/berkeley-cs61b) on [sp19](https://sp19.datastructur.es/)
 - [Lecture Code](https://github.com/Berkeley-CS61B/lectureCode-sp18)
 
 ---
